@@ -1,10 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Artist Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="display-4 text-light mt-4">🎤 Welcome, {{ request.user.username }}</h2>
+
+    <div class="mt-4">
+        <a href="{% url 'upload_track' %}" class="btn btn-custom">🎵 Upload Track</a>
+        <a href="{% url 'create_album' %}" class="btn btn-custom">📀 Create Album</a>
+    </div>
+
+    <!-- Секция альбомов -->
+    <h3 class="text-light mt-5">Your Albums</h3>
+    <div class="row">
+        {% for album in albums %}
+            <div class="col-md-4">
+                <div class="card mb-4 p-3">
+                    <h5 class="card-title text-light">{{ album.title }}</h5>
+                    <p class="text-muted">Release Date: {{ album.release_date }}</p>
+                    <a href="{% url 'album_detail' album.id %}" class="btn btn-custom btn-sm">View Album</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-light">You haven't created any albums yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Секция треков -->
+    <h3 class="text-light mt-5">Your Tracks</h3>
+    <div class="row">
+        {% for track in tracks %}
+            <div class="col-md-4">
+                <div class="card mb-4 p-3">
+                    <h5 class="card-title text-light">{{ track.title }}</h5>
+                    <p class="text-muted">Genre: {{ track.genre }}</p>
+                    <audio controls>
+                        <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-light">You haven't uploaded any tracks yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .btn-custom {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        margin: 10px 5px 20px 0;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+    }
+
+    .btn-custom:hover {
+        background-color: #0056b3;
+    }
+
+    .card {
+        background-color: #222;
+        color: white;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    audio {
+        width: 100%;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}

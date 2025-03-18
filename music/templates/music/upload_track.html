@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Upload Track{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-light">🎶 Upload Your Track</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label text-light">Title:</label>
+            {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-light">File:</label>
+            {{ form.audio_file }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-light">Genre:</label>
+            {{ form.genre }}
+        </div>
+
+        <button type="submit" class="btn btn-custom">Upload</button>
+    </form>
+</div>
+{% endblock %}

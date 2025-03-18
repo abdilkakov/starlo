@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Welcome to Starlo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="display-3 fw-bold text-light">Welcome to <span style="color:#ff7eb3;">Starlo</span> 🎵</h2>
+    <p class="lead">Discover, Upload, and Enjoy High-Quality Music.</p>
+
+    <div class="mt-4">
+        <a href="{% url 'register' %}" class="btn btn-custom">Join Now</a>
+        <a href="{% url 'login' %}" class="btn btn-outline-light btn-custom">Login</a>
+    </div>
+</div>
+{% endblock %}

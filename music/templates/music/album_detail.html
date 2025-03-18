@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}{{ album.title }} - Starlo{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; padding: 20px;">
+        <h1>{{ album.title }}</h1>
+        <img src="{{ album.cover.url }}" alt="{{ album.title }}" style="width: 300px; border-radius: 10px;">
+        <p><strong>Artist:</strong> {{ album.artist.name }}</p>
+        <p><strong>Release Date:</strong> {{ album.release_date }}</p>
+        <p><strong>Total Tracks:</strong> {{ tracks|length }}</p>
+
+        <h2>Tracks</h2>
+        <ul>
+            {% for track in tracks %}
+                <li>
+                    <strong>{{ track.title }}</strong>
+                    <audio controls>
+                        <source src="{{ track.file.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

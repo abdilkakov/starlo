@@ -1,10 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+    <h2>Sign Up</h2>
+    <form method="POST" enctype="multipart/form-data" class="register-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>{{ user_form.username.label }}</label>
+            {{ user_form.username }}
+        </div>
+
+        <div class="form-group">
+            <label>{{ user_form.email.label }}</label>
+            {{ user_form.email }}
+        </div>
+
+        <div class="form-group">
+            <label>{{ user_form.password.label }}</label>
+            {{ user_form.password }}
+        </div>
+
+        <div class="form-group">
+            <label>{{ user_form.password_confirm.label }}</label>
+            {{ user_form.password_confirm }}
+        </div>
+
+        <div class="form-group">
+            <h3>Select Your Role</h3>
+            {{ user_form.role }}
+        </div>
+
+        <div id="artist-fields" class="form-group" style="display: none;">
+            <h3>Artist Information</h3>
+            {{ artist_form.as_p }}
+        </div>
+
+        <button type="submit" class="btn">Register</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let roleInputs = document.querySelectorAll('input[name="role"]');
+            let artistFields = document.getElementById("artist-fields");
+
+            function toggleArtistFields() {
+                let selectedRole = document.querySelector('input[name="role"]:checked');
+                artistFields.style.display = selectedRole && selectedRole.value === "artist" ? "block" : "none";
+            }
+
+            roleInputs.forEach(input => input.addEventListener("change", toggleArtistFields));
+            toggleArtistFields(); // Проверяем при загрузке страницы
+        });
+    </script>
+
+    <style>
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #222;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .register-form {
+            background: #ffffff;
+            color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
