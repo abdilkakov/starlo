@@ -3,20 +3,97 @@
 {% block title %}Albums | Starlo{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="display-4 text-light mt-4">🎶 Explore Albums</h2>
-    <div class="row mt-4">
+<div class="album-container">
+    <h2>Explore Albums</h2>
+    <div class="album-grid">
         {% for album in albums %}
-            <div class="col-md-4">
-                <div class="card mb-4 p-3">
-                    <h5 class="card-title text-light">{{ album.title }}</h5>
-                    <p class="text-muted">Release Date: {{ album.release_date }}</p>
-    <a href="{% url 'album_detail' album.id %}" class="btn btn-custom btn-sm">Listen</a>
-                </div>
+            <div class="album-card">
+                <img src="{{ album.cover.url }}" alt="{{ album.title }}" class="album-cover">
+                <h3 class="album-title">{{ album.title }}</h3>
+                <p class="release-date">{{ album.release_date }}</p>
+                <a href="{% url 'album_detail' album.id %}" class="btn-listen">Listen</a>
             </div>
         {% empty %}
-            <p class="text-light">No albums available.</p>
+            <p class="no-albums">No albums available.</p>
         {% endfor %}
     </div>
 </div>
+
+<style>
+    .album-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .album-container h2 {
+        font-size: 32px;
+        margin-bottom: 30px;
+        color: #fff;
+    }
+
+    .album-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .album-card {
+        background: #1c1c1c;
+        border-radius: 12px;
+        padding: 20px;
+        width: 260px;
+        box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+    }
+
+    .album-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+    }
+
+    .album-cover {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .album-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    .release-date {
+        font-size: 14px;
+        color: #bbb;
+        margin-bottom: 20px;
+    }
+
+    .btn-listen {
+        display: inline-block;
+        background-color: #fd3c00;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-listen:hover {
+        background-color: #ff5733;
+    }
+
+    .no-albums {
+        color: #bbb;
+        font-size: 18px;
+        margin-top: 30px;
+    }
+</style>
 {% endblock %}

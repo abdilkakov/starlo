@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, upload_track, create_album, artist_dashboard, register, user_login, user_logout, albums, album_detail  # Добавьте artist_dashboard
+from .views import home, upload_track, create_album, artist_dashboard, register, user_login, user_logout, albums, album_detail, all_tracks, artist_profile, edit_track, delete_track, artist_tracks
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,4 +14,9 @@ urlpatterns = [
     path("logout/", user_logout, name="logout"),
     path('albums/', albums, name='albums'),
     path('album/<int:album_id>/', album_detail, name='album_detail'),
+    path('tracks/', all_tracks, name='all_tracks'),
+    path('artist/<str:username>/', artist_profile, name='artist-profile'),
+    path('track/edit/<int:track_id>/', edit_track, name='edit-track'),
+    path('track/delete/<int:track_id>/', delete_track, name='delete-track'),
+    path('artist_tracks/', artist_tracks, name='artist_tracks'),
 ]

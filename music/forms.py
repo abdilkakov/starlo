@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Artist, Track, Album
+from .models import Artist, Track, Album, Listener
 
 class TrackForm(forms.ModelForm):
     class Meta:
         model = Track
-        fields = ['title', 'audio_file']
+        fields = ['title', 'audio_file', 'cover_image']
 
 class AlbumForm(forms.ModelForm):
     tracks = forms.ModelMultipleChoiceField(
@@ -48,6 +48,27 @@ class UserRegistrationForm(forms.ModelForm):
         password_confirm = cleaned_data.get("password_confirm")
 
         if password and password_confirm and password != password_confirm:
+            self.add_error('password_confirm', "Passwords do not match.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+            role = self.cleaned_data["role"]
+            if role == "listener":
+                Listener.objects.create(user=user)
+            elif role == "artist":
+                Artist.objects.create(user=user, name=user.username)
+        return user
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
+
+        if password and password_confirm and password != password_confirm:
             raise forms.ValidationError("Passwords do not match!")
 
         return cleaned_data
@@ -60,7 +81,10 @@ class UserRegistrationForm(forms.ModelForm):
             user.save()
 
         return user
-
+class ListenerForm(forms.ModelForm):
+    class Meta:
+        model = Listener
+        fields = ['profile_picture']
 class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist

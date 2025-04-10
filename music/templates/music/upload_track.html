@@ -3,27 +3,95 @@
 {% block title %}Upload Track{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="text-light">🎶 Upload Your Track</h2>
-    <form method="post" enctype="multipart/form-data" class="mt-4">
-        {% csrf_token %}
+    <div class="upload-container">
+        <h2>🎶 Upload Your Track</h2>
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
 
-        <div class="mb-3">
-            <label class="form-label text-light">Title:</label>
-            {{ form.title }}
-        </div>
+            <div class="form-group">
+                <label>{{ form.title.label }}</label>
+                {{ form.title }}
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label text-light">File:</label>
-            {{ form.audio_file }}
-        </div>
+            <div class="form-group">
+                <label>{{ form.audio_file.label }}</label>
+                {{ form.audio_file }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.genre.label }}</label>
+                {{ form.genre }}
+            </div>
+             <div class="form-group">
+                <label>{{ form.cover_image.label }}</label>
+                {{ form.cover_image }}
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label text-light">Genre:</label>
-            {{ form.genre }}
-        </div>
 
-        <button type="submit" class="btn btn-custom">Upload</button>
-    </form>
-</div>
+            <button type="submit" class="btn">Upload</button>
+        </form>
+    </div>
+
+    <style>
+        .upload-container {
+            background: #111;
+            color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #222;
+            width: 100%;
+        }
+
+        .btn {
+            background-color: #fd3c00;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 6px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background-color: #ff5733;
+        }
+    </style>
 {% endblock %}

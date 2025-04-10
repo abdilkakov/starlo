@@ -1,26 +1,324 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}{{ album.title }} - Starlo{% endblock %}
 
 {% block content %}
-    <div style="text-align: center; padding: 20px;">
-        <h1>{{ album.title }}</h1>
-        <img src="{{ album.cover.url }}" alt="{{ album.title }}" style="width: 300px; border-radius: 10px;">
-        <p><strong>Artist:</strong> {{ album.artist.name }}</p>
-        <p><strong>Release Date:</strong> {{ album.release_date }}</p>
-        <p><strong>Total Tracks:</strong> {{ tracks|length }}</p>
-
-        <h2>Tracks</h2>
-        <ul>
-            {% for track in tracks %}
-                <li>
-                    <strong>{{ track.title }}</strong>
-                    <audio controls>
-                        <source src="{{ track.file.url }}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </li>
-            {% endfor %}
-        </ul>
+<div class="tracks-container">
+    <div class="album-header">
+        <img src="{{ album.cover.url }}" alt="{{ album.title }}" class="album-cover">
+        <div class="album-details">
+            <h1 class="album-title">{{ album.title }}</h1>
+            <p class="album-meta"><strong>Artist:</strong> {{ album.artist.name }}</p>
+            <p class="album-meta"><strong>Release Date:</strong> {{ album.release_date }}</p>
+            <p class="album-meta"><strong>Total Tracks:</strong> {{ tracks|length }}</p>
+        </div>
     </div>
+
+    <h2 class="tracks-title">Tracks</h2>
+
+    {% if tracks %}
+        {% for track in tracks %}
+            <div class="track-item">
+            <img src="{{ album.cover.url }}" alt="Album Cover" class="track-cover">                <div class="track-info">
+                    <h3 class="track-title">{{ track.title }}</h3>
+                    <p class="artist-name">{{ track.artist.user.username }}</p>
+                </div>
+                <button class="play-button" onclick="playTrack('{{ track.audio_file.url }}', '{{ track.title }}', '{{ track.artist.user.username }}', '{{ track.cover_image.url }}', this)">▶</button>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No tracks available.</p>
+    {% endif %}
+</div>
+
+<div id="fixed-audio-player" class="fixed-audio-player" style="display: none;">
+    <img id="player-cover" class="player-cover" src="" alt="Cover">
+    <div class="player-info">
+        <p id="track-info">Now Playing: </p>
+        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.1" onchange="seekAudio()">
+        <div class="player-buttons">
+            <button class="prev-button" onclick="prevTrack()">⏮</button>
+            <button id="player-play-button" class="play-button-audio" onclick="togglePlay()">▶</button>
+            <button class="next-button" onclick="nextTrack()">⏭</button>
+        </div>
+    </div>
+    <button class="close-button" onclick="closePlayer()">✖</button>
+</div>
+
+<script>
+let player = new Audio();
+let playerContainer = document.getElementById("fixed-audio-player");
+let trackInfo = document.getElementById("track-info");
+let playerCover = document.getElementById("player-cover");
+let progressBar = document.getElementById("progress-bar");
+let playButton = document.getElementById("player-play-button");
+
+let currentTrackIndex = 0;
+let tracks = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+    tracks = [...document.querySelectorAll(".play-button")];
+});
+
+function playTrack(audioSrc, title, artist, cover, button) {
+    if (player.src !== audioSrc) {
+        player.src = audioSrc;
+        player.load();
+        player.play();
+        trackInfo.textContent = `${title} - ${artist}`;
+        playerCover.src = cover;
+        playerContainer.style.display = "flex";
+        updateButtons(button);
+        playButton.textContent = "⏸";
+    } else {
+        togglePlay();
+    }
+    currentTrackIndex = tracks.indexOf(button);
+}
+
+function togglePlay() {
+    if (player.paused) {
+        player.play();
+        playButton.textContent = "⏸";
+        updateButtons(tracks[currentTrackIndex]);
+    } else {
+        player.pause();
+        playButton.textContent = "▶";
+        updateButtons(null);
+    }
+}
+
+function closePlayer() {
+    player.pause();
+    playerContainer.style.display = "none";
+    updateButtons(null);
+}
+
+function seekAudio() {
+    let percentage = progressBar.value;
+    player.currentTime = (percentage / 100) * player.duration;
+}
+
+player.ontimeupdate = function () {
+    if (player.duration) {
+        progressBar.value = (player.currentTime / player.duration) * 100;
+    }
+};
+
+function prevTrack() {
+    if (currentTrackIndex > 0) {
+        currentTrackIndex--;
+        tracks[currentTrackIndex].click();
+    }
+}
+
+function nextTrack() {
+    if (currentTrackIndex < tracks.length - 1) {
+        currentTrackIndex++;
+        tracks[currentTrackIndex].click();
+    }
+}
+
+function updateButtons(activeButton) {
+    tracks.forEach(btn => btn.textContent = "▶");
+    if (activeButton) activeButton.textContent = "⏸";
+}
+</script>
+
+<style>
+body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Allerta', sans-serif;
+}
+
+.tracks-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px 15px;
+}
+
+.album-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 20px;
+}
+
+.album-cover {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.album-details {
+    text-align: left;
+}
+
+.album-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.album-meta {
+    font-size: 14px;
+    color: #aaa;
+    margin: 4px 0;
+}
+
+.tracks-title {
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    background: #282828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.3s ease;
+}
+
+.track-item:hover {
+    background: #333;
+}
+
+.track-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.track-info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.track-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.artist-name {
+    font-size: 12px;
+    color: #bbb;
+    margin: 0;
+}
+
+.play-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+}
+
+/* Player */
+.fixed-audio-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-top: 1px solid #2a2a2a;
+    box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    height: 64px;
+}
+
+.player-cover {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.player-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+#track-info {
+    font-size: 14px;
+    margin: 0 0 6px 0;
+    text-align: center;
+    font-weight: 500;
+    color: #fff;
+}
+
+#progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #444;
+    border-radius: 4px;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+#progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #fd3c00;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+#progress-bar:hover {
+    background: #666;
+}
+
+.player-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 4px;
+}
+
+.prev-button,
+.play-button-audio,
+.next-button,
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.prev-button:hover,
+.play-button-audio:hover,
+.next-button:hover,
+.close-button:hover {
+    transform: scale(1.1);
+    color: #fd3c00;
+}
+
+.close-button {
+    margin-left: 12px;
+    font-size: 18px;
+}
+</style>
+
 {% endblock %}

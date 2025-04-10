@@ -1,101 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Starlo{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1e1e2f, #4b0082);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            text-align: center;
-            color: white;
-            border-bottom: 2px solid #ff7eb3;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        header a {
-            color: #ff7eb3;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        header a:hover {
-            color: white;
-        }
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        .btn-custom {
-            margin: 15px;
-            padding: 14px 30px;
-            font-size: 18px;
-            border-radius: 25px;
-            background: #ff7eb3;
-            color: white;
-            border: none;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 126, 179, 0.4);
-        }
-        .btn-custom:hover {
-            background: white;
-            color: #ff7eb3;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            border-top: 2px solid #ff7eb3;
-        }
-        .helptext {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Starlo Music{% endblock %}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: #0d0d0d;
+    }
+
+    .logo {
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: #ff4500;
+    }
+
+    .nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #fff;
+      transition: color 0.3s;
+    }
+
+    .nav a:hover {
+      color: #ff4500;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #0d0d0d;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>🌟 Starlo</h1>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'albums' %}">Albums</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'artist_dashboard' %}">Dashboard</a>
-            <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'register' %}">Sign Up</a>
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
+  <header class="header">
+    <div class="logo">STAR<span>LO</span></div>
+    <nav class="nav">
+      <a href="{% url 'home' %}">HOME</a>
+      <a href="{% url 'artist_dashboard' %}">PROFILE</a>
+      <a href="{% url 'albums' %}">ALBUMS</a>
+      <a href="{% url 'logout' %}">LOG OUT</a>
     </nav>
-</header>
+  </header>
 
-<main>
+  <main>
     {% block content %}{% endblock %}
-</main>
+  </main>
 
-<footer>
-    <p>© 2025 Starlo - Music for Everyone</p>
-</footer>
+  <footer class="footer">
+    <p>© 2025 Starlo Music. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
