@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ artist.username }}'s Profile{% endblock %}
+
+{% block content %}
+    <h2>🎤 {{ artist.username }}'s Tracks</h2>
+
+    {% if tracks %}
+        <ul>
+            {% for track in tracks %}
+                <li>
+                    <strong>{{ track.title }}</strong> 
+                    <a href="{% url 'edit-track' track.id %}">✏ Edit</a>
+                    <form action="{% url 'delete-track' track.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Delete this track?');">🗑 Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tracks uploaded yet.</p>
+    {% endif %}
+{% endblock %}
