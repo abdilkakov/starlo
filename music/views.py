@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Album, Artist, Listener, Track, User
 from .forms import AlbumForm, UserRegistrationForm, ArtistForm, TrackUploadForm, ListenerForm
+from django.http import JsonResponse
+from .ml_model import find_class_by_song
 
 
 def home(request):
@@ -323,3 +325,30 @@ def delete_track(request, track_id):
 def artist_tracks(request):
     tracks = Track.objects.filter(artist__user=request.user)
     return render(request, 'artist_tracks.html', {'tracks': tracks})
+
+
+# def search(request):
+#     if request.method == 'GET':
+#         query = request.GET.get('q')
+#         if not query:
+#             return JsonResponse({'error': 'No query provided'}, status=400)
+
+#         class_id, songs = find_class_by_song(query)
+#         if songs:
+#             return JsonResponse({'class_id': class_id, 'similar_songs': songs})
+#         else:
+#             return JsonResponse({'error': 'Song not found'}, status=404)
+
+def search(request):
+    query = request.GET.get('q')
+    songs = []
+    searched = False
+
+    if query:
+        class_id, songs = find_class_by_song(query)
+        searched = True
+
+    return render(request, 'music/search.html', {
+        'songs': songs,
+        'searched': searched,
+    })

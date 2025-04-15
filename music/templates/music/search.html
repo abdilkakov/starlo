@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Поиск песен — Starlo Music{% endblock %}
+
+{% block content %}
+<section class="search-page" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: calc(100vh - 100px); padding-top: 60px;">
+  <div class="search-card" style="background-color: #1a1a1a; padding: 40px; border-radius: 16px; text-align: center; box-shadow: 0 0 25px rgba(255, 69, 0, 0.3); width: 100%; max-width: 600px;">
+    <h2 style="color: #fff; margin-bottom: 20px;">🔍 Найди похожие песни по названию</h2>
+    
+    <form action="{% url 'search_by_song' %}" method="get" class="search-form" style="display: flex; flex-direction: column; align-items: center;">
+      <input
+        type="text"
+        name="q"
+        placeholder="Например: eminem_lose_yourself"
+        required
+        style="width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 30px; border: none; outline: none; background-color: #2a2a2a; color: #fff; font-size: 16px; margin-bottom: 20px; box-shadow: inset 0 0 5px rgba(255, 69, 0, 0.2); transition: all 0.3s ease;"
+        onfocus="this.style.boxShadow='0 0 10px rgba(255, 69, 0, 0.6)'"
+        onblur="this.style.boxShadow='inset 0 0 5px rgba(255, 69, 0, 0.2)'"
+      />
+      <button type="submit" class="btn">Поиск</button>
+    </form>
+
+    {% if songs %}
+      <div class="results" style="margin-top: 30px; text-align: center;">
+        <h3 style="color: #fff; margin-bottom: 15px;">🎵 Найденные похожие песни:</h3>
+        <ul style="list-style: none; padding: 0;">
+          {% for song in songs %}
+            <li style="color: #ff4500; font-size: 16px; margin: 6px 0;">{{ song }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% elif searched %}
+      <p style="color: #bbb; text-align: center; margin-top: 30px;">Песня не найдена 😢</p>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .btn {
+    background-color: transparent;
+    color: #ff4500;
+    border: 2px solid #ff4500;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 5px;
+  }
+
+  .btn:hover {
+    background-color: #ff4500;
+    color: #fff;
+  }
+</style>
+{% endblock %}

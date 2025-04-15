@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, upload_track, create_album, artist_dashboard, register, user_login, user_logout, albums, album_detail, all_tracks, artist_profile, edit_track, delete_track, artist_tracks
+from .views import home, upload_track, create_album, artist_dashboard, register, user_login, user_logout, albums, album_detail, all_tracks, artist_profile, edit_track, delete_track, artist_tracks, search
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -19,4 +19,5 @@ urlpatterns = [
     path('track/edit/<int:track_id>/', edit_track, name='edit-track'),
     path('track/delete/<int:track_id>/', delete_track, name='delete-track'),
     path('artist_tracks/', artist_tracks, name='artist_tracks'),
+    path('search/', search, name='search_by_song'),
 ]

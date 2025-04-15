@@ -8,7 +8,7 @@
     <div class="album-grid">
         {% for album in albums %}
             <div class="album-card">
-                <img src="{{ album.cover.url }}" alt="{{ album.title }}" class="album-cover">
+                <img src="#" alt="{{ album.title }}" class="album-cover">
                 <h3 class="album-title">{{ album.title }}</h3>
                 <p class="release-date">{{ album.release_date }}</p>
                 <a href="{% url 'album_detail' album.id %}" class="btn-listen">Listen</a>
@@ -16,6 +16,7 @@
         {% empty %}
             <p class="no-albums">No albums available.</p>
         {% endfor %}
+        
     </div>
 </div>
 
