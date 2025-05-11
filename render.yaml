@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: starlo-django
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn starlo.wsgi:application --bind 0.0.0.0:10000
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: starlo.settings
+      - key: SECRET_KEY
+        value: your_secret_key_here
+      - key: ALLOWED_HOSTS
+        value: your-app-name.onrender.com
