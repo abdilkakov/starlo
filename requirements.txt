@@ -1,0 +1,36 @@
+# Django
+Django>=4.2,<5.0
+
+# Gunicorn — WSGI-сервер для продакшн
+gunicorn
+
+# База данных — если используешь PostgreSQL
+psycopg2-binary
+
+# Для управления статикой
+whitenoise
+
+# PyTorch
+torch
+torchvision
+torchaudio
+
+# TensorFlow
+tensorflow
+
+# Работа с изображениями (если обрабатываешь медиа)
+Pillow
+
+# DRF (если используешь REST API)
+djangorestframework
+
+# CORS (если фронтенд отдельно)
+django-cors-headers
+
+# .env поддержка (если используешь)
+python-dotenv
+
+# Дополнительно, по желанию:
+numpy
+pandas
+scikit-learn
