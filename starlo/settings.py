@@ -28,9 +28,7 @@ SECRET_KEY = 'django-insecure-!lggefie-^0kp5rwg98jvls5^i=%brmu+5s5ogy+-x2i(g0u%5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['starlo.kz', '77.240.39.109']
-
-
+ALLOWED_HOSTS = ['starlo.kz', '']
 
 
 # Application definition
@@ -133,6 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 
 MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 mimetypes.add_type("audio/mpeg", ".mp3", True)
